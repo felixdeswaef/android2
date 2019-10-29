@@ -2,4 +2,4 @@
 Android reminder app built for school project
 hosted on git.felixdeswaef.be
 compiled on tc.felixdeswaef.be
-latest build APK available here : apk
+latest build APK available here : http://tc.felixdeswaef.be/repository/download/AndroidReminder_Build/.lastFinished/app-debug.apk
