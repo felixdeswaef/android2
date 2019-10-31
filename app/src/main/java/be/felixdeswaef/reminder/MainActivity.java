@@ -107,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
 
 
     }
+    public void updatelist(){
 
+    }
     @Override
     public void onFragmentInteraction(Uri uri) {
 

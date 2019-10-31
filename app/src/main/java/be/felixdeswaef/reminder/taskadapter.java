@@ -109,6 +109,8 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                             (keyCode == KeyEvent.KEYCODE_ENTER)) {
                             MainActivity.handler.pushQuick(tv.getText().toString());
+                            Update(MainActivity.handler.getData());
+
 
 
 

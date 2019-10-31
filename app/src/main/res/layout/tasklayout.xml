@@ -105,6 +105,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:indeterminate="false"
+        android:indeterminateBehavior="cycle"
         android:max="100"
         android:progress="10"
         app:layout_constraintBottom_toBottomOf="@+id/tasktext"
