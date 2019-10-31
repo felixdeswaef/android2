@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
         fragmag =  getSupportFragmentManager();
         cr = getContentResolver();
         handler = new DHandler(this);
-        loaddetails(1);
+
 
 
 

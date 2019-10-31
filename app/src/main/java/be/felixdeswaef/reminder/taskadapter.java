@@ -2,8 +2,10 @@ package be.felixdeswaef.reminder;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Debug;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +20,7 @@ import com.google.gson.Gson;
 
 public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> {
     private task[] mDataset;
+    private Context context;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -59,6 +62,7 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
     // Provide a suitable constructor (depends on the kind of dataset)
     public taskadapter(task[] myDataset) {
         mDataset = myDataset;
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -80,11 +84,22 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
             mDataset = incoming;
             this.notifyDataSetChanged();
     }
+    public void showdetails(int id){
+
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        holder.taskvieuw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view ) {
+                showdetails(1);
+                Log.v("hey","v"+view.toString());
+            }
+        });
         if (position!=mDataset.length) {
             ((TextView) holder.taskvieuw.getViewById(R.id.tasktext)).setText(mDataset[position].name + " " + position);
             ( holder.taskvieuw.getViewById(R.id.tasktext)).setVisibility(View.VISIBLE);
