@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -22,8 +23,9 @@ public class DetailActivity extends AppCompatActivity implements TaskDetailFragm
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        String data = (new Gson().fromJson(intent.getStringExtra("data"),String.class));
+        task data = (new Gson().fromJson(intent.getStringExtra("data"),task.class));
         TaskDetailFragment detailfragment = new TaskDetailFragment();
+        Log.e("SETDATA","isnull : "+ ((data==null)? "true":"false"));
         detailfragment.setData(data);
         getSupportFragmentManager().beginTransaction().replace(R.id.fram, detailfragment).commit();
 

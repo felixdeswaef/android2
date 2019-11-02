@@ -4,9 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -21,13 +24,12 @@ import android.widget.TextView;
 public class TaskDetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    String data ;
+
+    task data ;
 
     // TODO: Rename and change types of parameters
     public String mParam1;
-    private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -39,17 +41,14 @@ public class TaskDetailFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * //@param param1 Parameter 1.
      *
      * @return A new instance of fragment TaskDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TaskDetailFragment newInstance(String param1) {
+    public static TaskDetailFragment newInstance() {
         TaskDetailFragment fragment = new TaskDetailFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, "param2");
-        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -57,8 +56,8 @@ public class TaskDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+
         }
     }
 
@@ -67,17 +66,25 @@ public class TaskDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_detail, container, false);
-        TextView tv1 = view.findViewById(R.id.tv1);
-        tv1.setText(data);
+        TextView tv1 = view.findViewById(R.id.tasktitle);
+        tv1.setText(data.name);
+        ((ProgressBar)view.findViewById(R.id.DETAILPROGRESS)).setProgress(data.completion);
+        ((TextView)view.findViewById(R.id.DESCRIPTION)).setText(data.description);
+        ((TextView)view.findViewById(R.id.COMPLETION)).setText(data.completion + "% completed");
+        ((TextView)view.findViewById(R.id.DEADLINE)).setText(data.deadline + "days left");
+        final int id = data.id;
+        Log.d("dbg",id + " i d ."+data.name);
+        ((Button) view.findViewById(R.id.edittaskbuton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.handler.inf.EditDetails(id);
+            }
+        });
         return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -110,7 +117,10 @@ public class TaskDetailFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    public void setData(String sdata){
+    public void setData(task sdata){
+
         data=sdata;
+        //Log.e("SETDATA",(sdata==null)? "true":"false");
     }
+
 }

@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 
 public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> {
     private task[] mDataset;
-    private Context context;
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -32,6 +32,7 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
         public MyViewHolder(ConstraintLayout v) {
             super(v);
             taskvieuw = v;
+
         }
 
         @Override
@@ -85,7 +86,7 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
             this.notifyDataSetChanged();
     }
     public void showdetails(int id){
-
+        MainActivity.handler.inf.ShowDetails(id);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -93,13 +94,7 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.taskvieuw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view ) {
-                showdetails(1);
-                Log.v("hey","v"+view.toString());
-            }
-        });
+
         if (position!=mDataset.length) {
             ((TextView) holder.taskvieuw.getViewById(R.id.tasktext)).setText(mDataset[position].name + " " + position);
             ( holder.taskvieuw.getViewById(R.id.tasktext)).setVisibility(View.VISIBLE);
@@ -108,6 +103,17 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
             ( holder.taskvieuw.getViewById(R.id.sub)).setVisibility(View.VISIBLE);
             ( holder.taskvieuw.getViewById(R.id.orderbuton)).setVisibility(View.VISIBLE);
             ( holder.taskvieuw.getViewById(R.id.newfield)).setVisibility(View.INVISIBLE);
+
+            final int id = mDataset[position].id;
+            holder.taskvieuw.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view ) {
+                    showdetails(id);
+
+                    Log.v("hey","v"+view.toString());
+                }
+            });
+
         }
         else{
             ( holder.taskvieuw.getViewById(R.id.tasktext)).setVisibility(View.INVISIBLE);

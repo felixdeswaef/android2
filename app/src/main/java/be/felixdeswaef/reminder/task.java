@@ -10,6 +10,8 @@ public class task{
     public Timestamp creationdate;
     public Boolean checked;
     public Boolean hidden;
+    public String description;
+    public int completion;
 
     public task(String nname){
         id = -1;

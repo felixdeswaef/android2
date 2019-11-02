@@ -50,7 +50,16 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
         });
         fragmag =  getSupportFragmentManager();
         cr = getContentResolver();
-        handler = new DHandler(this);
+        calls intf = new calls() {
+            @Override
+            public void ShowDetails(int id) {
+                loaddetails(id);
+            }
+
+            @Override
+            public void EditDetails(int id) {EditTask(id);}
+        };
+        handler = new DHandler(this,intf);
 
 
 
@@ -62,8 +71,10 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
     }
     public void EditTask(int id){
         Intent editIntent = new Intent(this,EditTask.class);
+        //Log.d("dbg",id + "num");
         if (id!=-1){
             editIntent.putExtra("data", new Gson().toJson(handler.getData(id)));
+            Log.d("dbg","added stuff in there");
         }
         startActivity(editIntent);
     }
@@ -89,10 +100,11 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
         return super.onOptionsItemSelected(item);
     }
         public void loaddetails(int id){
-
+        Log.e("SETDATA","isnull : "+ ((handler.getData(id)==null)? "true":"false"));
 
 
         if (findViewById(R.id.fram1)==null){
+            Log.e("DATA FROM HANDLER",handler.getData(id).name);
             Intent detailIntent = new Intent(this, DetailActivity.class);
             detailIntent.putExtra("data", new Gson().toJson(handler.getData(id)));
             startActivity(detailIntent);
@@ -100,18 +112,19 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
 
         }
         else{
+            Log.e("DATA FROM HANDLER",handler.getData(id).name);
             TaskDetailFragment detailfragment = new TaskDetailFragment();
-            detailfragment.setData(new Gson().toJson(handler.getData(id)));
+            detailfragment.setData(handler.getData(id));
             fragmag.beginTransaction().replace(R.id.fram1, detailfragment).commit();
         }
 
 
     }
-    public void updatelist(){
 
-    }
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 }
