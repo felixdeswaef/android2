@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -62,6 +63,14 @@ public class tasklist extends Fragment {
         mAdapter = new taskadapter(handler.getData());
 
         recyclerView.setAdapter(mAdapter);
+        final SwipeRefreshLayout pullToRefresh = getView().findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reload(); // your code
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
 
 

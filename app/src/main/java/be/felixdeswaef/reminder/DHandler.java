@@ -60,6 +60,7 @@ public DHandler(Context ct,calls tasks){
         ContentValues cval = new ContentValues();//TODO
         cval.put("value",gs.toJson(t));
         cval.put("name",t.name);
+        cval.put("_id",id);
         Uri uri =LocalTaskProvider.CONTENT_URI;
         String[] projection  = {"value","name","_id"} ;
         String selection  = "_id = ?" ;
