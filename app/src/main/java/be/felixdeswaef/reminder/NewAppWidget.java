@@ -1,8 +1,13 @@
 package be.felixdeswaef.reminder;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
 /**
@@ -15,11 +20,28 @@ public class NewAppWidget extends AppWidgetProvider {
 
         CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        //LayoutInflater myInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //View myRoot = myInflater.inflate(R.layout.new_app_widget, null);
+        //View box = myInflater.inflate(R.layout.widgettask,(LinearLayout) myRoot.findViewById(R.id.lines));
+
+        RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.new_app_widget);
+        views.setRemoteAdapter(R.id.lines,
+                new Intent(context, widgetService.class));
+
+
+        Intent launchMain = new Intent(context, MainActivity.class);
+        PendingIntent pendingMainIntent = PendingIntent.getActivity(context, 0, launchMain, 0);
+        views.setOnClickPendingIntent(R.id.widgtitbar, pendingMainIntent);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.lines);
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+
+
+        //views.setTextViewText(R.id.appwidget_text, widgetText);
 
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+
+
+
     }
 
     @Override

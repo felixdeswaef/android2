@@ -5,21 +5,62 @@
     android:padding="@dimen/widget_margin">
 
     <TextView
-        android:id="@+id/appwidget_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/widgtitbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorPrimary"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="36sp"
-        android:textStyle="bold|italic" />
+        android:text="sucky widget" />
+
+    <LinearLayout
+        android:id="@+id/lines"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/widget"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#E02727"
+            android:backgroundTintMode="add">
+
+            <TextView
+                android:id="@+id/widgtitle"
+                android:layout_width="300dp"
+                android:layout_height="53dp"
+                android:background="#00CF3535"
+                android:text="TextView"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/widgprog"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/widgtitle" />
+
+            <TextView
+                android:id="@+id/widgdead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="42dp"
+                android:text="2d "
+                app:layout_constraintBottom_toTopOf="@+id/widgprog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/widgtitle"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+
+
+
+    </LinearLayout>
 
 </RelativeLayout>

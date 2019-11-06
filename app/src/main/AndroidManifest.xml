@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditTask"></activity>
+        <service
+            android:name=".widgetService"
+            android:exported="false"></service>
+
+        <activity android:name=".EditTask" />
 
         <receiver android:name=".NewAppWidget">
             <intent-filter>
@@ -38,7 +42,7 @@
 
         <provider
             android:name=".LocalTaskProvider"
-            android:authorities="be.felixdeswaef.reminder.LocalTaskProvider"></provider>
+            android:authorities="be.felixdeswaef.reminder.LocalTaskProvider" />
     </application>
 
 </manifest>

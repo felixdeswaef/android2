@@ -1,6 +1,7 @@
 package be.felixdeswaef.reminder;
 
 
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -26,7 +27,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-public class MainActivity extends AppCompatActivity implements TaskDetailFragment.OnFragmentInteractionListener  {
+public class MainActivity extends AppCompatActivity implements TaskDetailFragment.OnFragmentInteractionListener {
 
     ContentResolver cr;
     static DHandler handler;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
 
             }
         });
-        fragmag =  getSupportFragmentManager();
+        fragmag = getSupportFragmentManager();
         cr = getContentResolver();
         calls intf = new calls() {
             @Override
@@ -57,31 +58,36 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
             }
 
             @Override
-            public void EditDetails(int id) {EditTask(id);}
+            public void EditDetails(int id) {
+                EditTask(id);
+            }
         };
-        handler = new DHandler(this,intf);
-
-
+        handler = new DHandler(this, intf);
 
 
     }
 
-    public void EditTask(){
+    public void EditTask() {
         EditTask(-1);
     }
-    public void EditTask(int id){
-        Intent editIntent = new Intent(this,EditTask.class);
+
+    public void EditTask(int id) {
+        Intent editIntent = new Intent(this, EditTask.class);
         //Log.d("dbg",id + "num");
-        if (id!=-1){
+        if (id != -1) {
             editIntent.putExtra("data", new Gson().toJson(handler.getData(id)));
-            Log.d("dbg","added stuff in there");
+            Log.d("dbg", "added stuff in there");
         }
         startActivity(editIntent);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+
+
         return true;
     }
 
@@ -96,23 +102,27 @@ public class MainActivity extends AppCompatActivity implements TaskDetailFragmen
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.DBDEL){
+            handler.DELETEALL("IAMCOMPLETELYCRAZY");
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
-        public void loaddetails(int id){
-        Log.e("SETDATA","isnull : "+ ((handler.getData(id)==null)? "true":"false"));
+
+    public void loaddetails(int id) {
+        Log.e("SETDATA", "isnull : " + ((handler.getData(id) == null) ? "true" : "false"));
 
 
-        if (findViewById(R.id.fram1)==null){
-            Log.e("DATA FROM HANDLER",handler.getData(id).name);
+        if (findViewById(R.id.fram1) == null) {
+            Log.e("DATA FROM HANDLER", handler.getData(id).name);
             Intent detailIntent = new Intent(this, DetailActivity.class);
             detailIntent.putExtra("data", new Gson().toJson(handler.getData(id)));
             startActivity(detailIntent);
 
 
-        }
-        else{
-            Log.e("DATA FROM HANDLER",handler.getData(id).name);
+        } else {
+            Log.e("DATA FROM HANDLER", handler.getData(id).name);
             TaskDetailFragment detailfragment = new TaskDetailFragment();
             detailfragment.setData(handler.getData(id));
             fragmag.beginTransaction().replace(R.id.fram1, detailfragment).commit();

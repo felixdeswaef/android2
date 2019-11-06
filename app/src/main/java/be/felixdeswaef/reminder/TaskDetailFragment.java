@@ -51,7 +51,13 @@ public class TaskDetailFragment extends Fragment {
 
         return fragment;
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.setData(MainActivity.handler.getData(this.data.id));
+        this.reprint(getView());
+        //Code to refresh listview
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,18 +66,20 @@ public class TaskDetailFragment extends Fragment {
 
         }
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_task_detail, container, false);
+       void reprint(View view){
         TextView tv1 = view.findViewById(R.id.tasktitle);
         tv1.setText(data.name);
         ((ProgressBar)view.findViewById(R.id.DETAILPROGRESS)).setProgress(data.completion);
         ((TextView)view.findViewById(R.id.DESCRIPTION)).setText(data.description);
         ((TextView)view.findViewById(R.id.COMPLETION)).setText(data.completion + "% completed");
-        ((TextView)view.findViewById(R.id.DEADLINE)).setText(data.deadline + "days left");
+        ((TextView)view.findViewById(R.id.DEADLINE)).setText(MainActivity.handler.DaysString(data.deadline));
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_task_detail, container, false);
+        reprint(view);
         final int id = data.id;
         Log.d("dbg",id + " i d ."+data.name);
         ((Button) view.findViewById(R.id.edittaskbuton)).setOnClickListener(new View.OnClickListener() {
@@ -80,6 +88,7 @@ public class TaskDetailFragment extends Fragment {
                 MainActivity.handler.inf.EditDetails(id);
             }
         });
+
         return view;
     }
 

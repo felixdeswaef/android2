@@ -4,8 +4,13 @@
     tools:context="be.felixdeswaef.reminder.MainActivity">
     <item
         android:id="@+id/action_settings"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="100"
         android:title="@string/action_settings"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/DBDEL"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="DONTCLICKTHIS"
         app:showAsAction="never" />
 </menu>

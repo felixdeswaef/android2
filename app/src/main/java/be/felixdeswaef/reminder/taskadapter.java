@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,11 +99,14 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
 
         if (position!=mDataset.length) {
             ((TextView) holder.taskvieuw.getViewById(R.id.tasktext)).setText(mDataset[position].name + " " + position);
+            ((TextView) holder.taskvieuw.getViewById(R.id.deadline)).setText(MainActivity.handler.DaysString(mDataset[position].deadline));
+            ((TextView) holder.taskvieuw.getViewById(R.id.sub)).setText((mDataset[position].completion + "%"));
+            ((CheckBox) holder.taskvieuw.getViewById(R.id.checkBox)).setChecked(mDataset[position].checked);
             ( holder.taskvieuw.getViewById(R.id.tasktext)).setVisibility(View.VISIBLE);
             ( holder.taskvieuw.getViewById(R.id.checkBox)).setVisibility(View.VISIBLE);
             ( holder.taskvieuw.getViewById(R.id.deadline)).setVisibility(View.VISIBLE);
             ( holder.taskvieuw.getViewById(R.id.sub)).setVisibility(View.VISIBLE);
-            ( holder.taskvieuw.getViewById(R.id.orderbuton)).setVisibility(View.VISIBLE);
+            ( holder.taskvieuw.getViewById(R.id.orderbuton)).setVisibility(View.INVISIBLE);
             ( holder.taskvieuw.getViewById(R.id.newfield)).setVisibility(View.INVISIBLE);
 
             final int id = mDataset[position].id;
@@ -110,7 +115,15 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
                 public void onClick(View view ) {
                     showdetails(id);
 
-                    Log.v("hey","v"+view.toString());
+
+
+                }
+            });
+            ((CheckBox)holder.taskvieuw.getViewById(R.id.checkBox)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.handler.checkstate(id,((CheckBox) view).isChecked());
+                    Update(MainActivity.handler.getData());
                 }
             });
 
