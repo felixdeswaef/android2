@@ -5,10 +5,13 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 /**
  * Implementation of App Widget functionality.
@@ -18,27 +21,25 @@ public class NewAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-        //LayoutInflater myInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //View myRoot = myInflater.inflate(R.layout.new_app_widget, null);
-        //View box = myInflater.inflate(R.layout.widgettask,(LinearLayout) myRoot.findViewById(R.id.lines));
+
+
 
         RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.new_app_widget);
-        views.setRemoteAdapter(R.id.lines,
-                new Intent(context, widgetService.class));
+
+        setRemoteAdapter(context, views);
 
 
         Intent launchMain = new Intent(context, MainActivity.class);
         PendingIntent pendingMainIntent = PendingIntent.getActivity(context, 0, launchMain, 0);
-        views.setOnClickPendingIntent(R.id.widgtitbar, pendingMainIntent);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.lines);
+        views.setOnClickPendingIntent(R.id.lines, pendingMainIntent);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.lines2);
+
         appWidgetManager.updateAppWidget(appWidgetId, views);
+
 
 
         //views.setTextViewText(R.id.appwidget_text, widgetText);
 
-        // Instruct the widget manager to update the widget
 
 
 
@@ -49,7 +50,9 @@ public class NewAppWidget extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
+
         }
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
@@ -60,6 +63,10 @@ public class NewAppWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+    private static void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
+        views.setRemoteAdapter(R.id.lines2,
+                new Intent(context, widgetService.class));
     }
 }
 

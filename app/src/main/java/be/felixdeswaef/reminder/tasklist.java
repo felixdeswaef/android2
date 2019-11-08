@@ -81,6 +81,7 @@ public class tasklist extends Fragment {
 
 
         mAdapter.Update(handler.getData());
+        handler.updWidget();
 
     }
 

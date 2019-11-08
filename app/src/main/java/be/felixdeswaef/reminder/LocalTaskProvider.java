@@ -22,7 +22,7 @@ public class LocalTaskProvider extends ContentProvider {
 
     static final String _ID = "_id";
     static final String NAME = "name";
-    static final String GRADE = "grade";
+
 
     private static HashMap<String, String> TASK_PROJECTION_MAP;
 
@@ -89,15 +89,11 @@ private static class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        /**
-         * Add a new student record
-         */
+        //add new task
         long rowID = db.insert(TASK_TABLE_NAME, "", values);
 
-        /**
-         * If record is added successfully
-         */
-        if (rowID > 0) {
+
+        if (rowID > 0) {   //succes ?
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
             getContext().getContentResolver().notifyChange(_uri, null);
             return _uri;
@@ -117,7 +113,7 @@ private static class DatabaseHelper extends SQLiteOpenHelper {
                 qb.setProjectionMap(TASK_PROJECTION_MAP);
                 break;
 
-            case TASK_ID:
+            case TASK_ID: //if id was specified
                 qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
                 break;
 
@@ -125,9 +121,7 @@ private static class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (sortOrder == null || sortOrder == ""){
-            /**
-             * By default sort on student names
-             */
+            //sortorder not set
             sortOrder = NAME;
         }
 
@@ -145,11 +139,11 @@ private static class DatabaseHelper extends SQLiteOpenHelper {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int count = 0;
         switch (uriMatcher.match(uri)){
-            case TASK:
+            case TASK:  //delete all
                 count = db.delete(TASK_TABLE_NAME, selection, selectionArgs);
                 break;
 
-            case TASK_ID:
+            case TASK_ID: //delete on id
                 String id = uri.getPathSegments().get(1);
                 count = db.delete(TASK_TABLE_NAME, _ID +  " = " + id +
                                 (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
@@ -186,16 +180,12 @@ private static class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)){
-            /**
-             * Get all student records
-             */
+
             case TASK:
-                return "vnd.android.cursor.dir/vnd.example.students";
-            /**
-             * Get a particular student
-             */
+                return "felixdeswaef.android.cursor.dir/felixdeswaef.reminder.task";
+
             case TASK_ID:
-                return "vnd.android.cursor.item/vnd.example.students";
+                return "felixdeswaef.android.cursor.item/felixdeswaef.reminder.task";
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

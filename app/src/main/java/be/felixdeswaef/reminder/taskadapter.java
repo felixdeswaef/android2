@@ -98,10 +98,16 @@ public class taskadapter extends RecyclerView.Adapter<taskadapter.MyViewHolder> 
         // - replace the contents of the view with that element
 
         if (position!=mDataset.length) {
-            ((TextView) holder.taskvieuw.getViewById(R.id.tasktext)).setText(mDataset[position].name + " " + position);
+            ((TextView) holder.taskvieuw.getViewById(R.id.tasktext)).setText(mDataset[position].name);
             ((TextView) holder.taskvieuw.getViewById(R.id.deadline)).setText(MainActivity.handler.DaysString(mDataset[position].deadline));
             ((TextView) holder.taskvieuw.getViewById(R.id.sub)).setText((mDataset[position].completion + "%"));
-            ((CheckBox) holder.taskvieuw.getViewById(R.id.checkBox)).setChecked(mDataset[position].checked);
+            try {
+                ((CheckBox) holder.taskvieuw.getViewById(R.id.checkBox)).setChecked(mDataset[position].checked);
+            }catch (Exception e){
+                //bool not set
+                ((CheckBox) holder.taskvieuw.getViewById(R.id.checkBox)).setChecked(false);
+            }
+
             ( holder.taskvieuw.getViewById(R.id.tasktext)).setVisibility(View.VISIBLE);
             ( holder.taskvieuw.getViewById(R.id.checkBox)).setVisibility(View.VISIBLE);
             ( holder.taskvieuw.getViewById(R.id.deadline)).setVisibility(View.VISIBLE);

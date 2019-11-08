@@ -1,8 +1,11 @@
 package be.felixdeswaef.reminder;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
@@ -18,11 +21,13 @@ import java.util.List;
 
 public class DHandler {
     ContentResolver cr;
+    Context context;
     calls inf;
     calls rootinterface;
 
     public DHandler(Context ct, calls tasks) {
         cr = ct.getContentResolver();
+        context = ct;
         inf = tasks;
 
 
@@ -94,11 +99,13 @@ public class DHandler {
         String[] projection = {"value", "name", "_id"};
         cur = cr.query(uri, projection, null, null, null);
         Log.d("DBDB", DatabaseUtils.dumpCursorToString(cur));
+        cur.close();
     }
-    public void checkstate(int id,Boolean state){
+
+    public void checkstate(int id, Boolean state) {
         task t = getData(id);
         t.checked = state;
-        editTask(t,id);
+        editTask(t, id);
     }
 
 
@@ -120,6 +127,7 @@ public class DHandler {
         try {
             task t = new Gson().fromJson(data, task.class);
             t.id = cur.getInt(2);
+            cur.close();
             return t;
         } catch (Exception e) {
             Log.d("DBDB", "exepted ::" + data + values[0]);
@@ -154,7 +162,7 @@ public class DHandler {
 
             cur.moveToNext();
         }
-
+        cur.close();
         return (task[]) taskList.toArray(new task[taskList.size()]);
 
 
@@ -196,7 +204,20 @@ public class DHandler {
         } else {
             timeS = "about a minute";
         }
-        return timeS + lo ;
+        return timeS + lo;
+
+    }
+
+    public void updWidget() {
+    /*
+        Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.setComponent(new ComponentName(context, NewAppWidget.class));
+        context.sendBroadcast(intent);
+
+        Not gonna work in time
+     */
+
+        Log.w("WDGT","widget refresh called");
 
     }
 }

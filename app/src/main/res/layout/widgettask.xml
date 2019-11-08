@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E02727"
-    android:backgroundTintMode="add">
+
+    android:layout_height="wrap_content"
+    android:layout_margin="1pt"
+    android:background="#7E7070"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/widgetcont"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="1pt">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/widgtitle"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:background="#00CF3535"
+            android:text="@string/rando1"
+            android:textSize="12pt" />
 
-            <TextView
-                android:id="@+id/widgtitle"
-                android:layout_width="300dp"
-                android:layout_height="53dp"
-                android:background="#00CF3535"
-                android:text="TextView"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/widgdead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="42dp"
-                android:text="2d " />
-        </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/widgprog"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/widgdead"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
 
+            android:text="timeleft" />
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/widgprog"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:indeterminate="true" />
+
+</LinearLayout>

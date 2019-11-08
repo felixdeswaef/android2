@@ -1,5 +1,6 @@
 package be.felixdeswaef.reminder;
 
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Context;
@@ -11,28 +12,43 @@ import android.os.Binder;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class widgetAdapter implements RemoteViewsService.RemoteViewsFactory {
     private Context context;
-    task[] tasklist;
+    private task[] tasklist;
     private Intent intent;
 
     //For obtaining the activity's context and intent
-    public widgetAdapter(Context context, Intent intent) {
+    public widgetAdapter(Context context,Intent intent) {
         this.context = context;
         this.intent = intent;
+
     }
 
     private void initCursor(){ //TODO get/update data
-        task a = new task("a task");
-        task b = new task("btask");
-        task c = new task("c task");
-        tasklist = new task[] {a,b,c};
-
+        //Exception str = null ;
+        //try {
+            //context.getApplicationContext().getClass();
+            //getTData();
+        //}catch (Exception exeption){
+            //str = exeption;
+        //}
+        task a = new task("a");
+        task b = new task("b");
+        task c = new task("c");
+        tasklist = getTData();
 
         /*
+        Log.e("WDGT","init data");
+
+
+
         //tasklist = MainActivity.handler.getData();
         ContentResolver cr = context.getContentResolver();
         Cursor cur = null;
@@ -80,7 +96,11 @@ public class widgetAdapter implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-        //initCursor();
+        Toast.makeText(context,"got created",Toast.LENGTH_LONG).show();
+        initCursor();
+        Toast.makeText(context,"init complete",Toast.LENGTH_LONG).show();
+
+
         /*
 
         initCursor();
@@ -94,6 +114,7 @@ public class widgetAdapter implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         /** Listen for data changes and initialize the cursor again **/
+        //Toast.makeText(context,"dataset changed",Toast.LENGTH_LONG).show();
         initCursor();
     }
 
@@ -104,17 +125,33 @@ public class widgetAdapter implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getCount() {
-        return 9;//tasklist.length;
+        return tasklist.length;
     }
 
     @Override
     public RemoteViews getViewAt(int i) {
+        //Toast.makeText(context,"get vieuw at called ",Toast.LENGTH_LONG).show();
         /** Populate your widget's single list item **/
+        String msg = "";
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widgettask);
 
-        remoteViews.setTextViewText(R.id.widgtitle,"bob "+i);// tasklist[i].name);
+        //Toast.makeText(context,"got vieuw at"+i,Toast.LENGTH_LONG).show();
+        remoteViews.setTextViewText(R.id.widgtitle, tasklist[i].name);
         //remoteViews.setTextViewText(R.id.widgdead,MainActivity.handler.DaysString(tasklist[i].deadline));
-        remoteViews.setProgressBar(R.id.widgprog,100,i*5+20,false);//,tasklist[i].completion,false);
+        try{
+            remoteViews.setProgressBar(R.id.widgprog,100,tasklist[i].completion,false);//tasklist[i].completion
+            msg = "gs";
+        }catch (Exception e){
+            remoteViews.setProgressBar(R.id.widgprog,100,50,true);//tasklist[i].completion
+            msg = "ex";
+        }
+        remoteViews.setTextViewText(R.id.widgdead,msg);
+
+        Intent launchMain = new Intent(context, MainActivity.class);
+        PendingIntent pendingMainIntent = PendingIntent.getActivity(context, 0, launchMain, 0);
+        remoteViews.setOnClickPendingIntent(R.id.widgetcont, pendingMainIntent);
+
+
 
         return remoteViews;
     }
@@ -138,4 +175,62 @@ public class widgetAdapter implements RemoteViewsService.RemoteViewsFactory {
     public boolean hasStableIds() {
         return true;
     }
+
+    public task[] getTData(){
+        try {
+
+            Cursor cur = null;
+            if (cur != null) {
+                cur.close();
+            }
+            Uri uri = LocalTaskProvider.CONTENT_URI;
+            final long identityToken = Binder.clearCallingIdentity();
+            /**This is done because the widget runs as a separate thread
+             when compared to the current app and hence the app's data won't be accessible to it
+             because I'm using a content provided **/
+
+            List<task> taskList = new ArrayList<task>();
+
+
+            String[] projection = {"value", "name", "_id"};
+            String selection = "";
+            Gson gs = new Gson();
+            ContentResolver cr = this.context.getContentResolver();
+            cur = cr.query(uri, projection, selection, null, null);
+            cur.moveToFirst();
+            while (!cur.isAfterLast()) {
+
+                String data = cur.getString(0);
+                int id = cur.getInt(2);
+                try {
+                    task t = gs.fromJson(data, task.class);
+                    t.id = id;
+                    taskList.add(t);
+                } catch (Exception e) {// also catches illegal items in database //TODO create cleanup routine
+                    //Log.d("DBDB", "exepted ::" + data);
+
+                }
+
+                cur.moveToNext();
+            }
+            cur.close();
+            Binder.restoreCallingIdentity(identityToken);
+
+            //Log.e("WGT","db read" +taskList.size() + "items");
+
+            return ((task[]) taskList.toArray(new task[taskList.size()]));
+
+
+
+
+
+        }catch (Exception e){
+            task a = new task("an error ocured");
+
+            return new task[] {a};
+        }
+
+
+    }
+
 }
